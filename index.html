@@ -2,8 +2,7 @@
   <body>
   	<h1>Update x</h1>
     <input type='button' onclick="connect()" value='connect'/>
-    <input type='button' onclick="read()" value='read'/>
-    <input type='button' onclick="write()" value='write'/>
+    <input type='button' onclick="read/write()" value='readwrite'/>
     <div id="device_info"></div>
     <script>
     function log(result) {
@@ -16,20 +15,52 @@
 		.then(selectedDevice => {
 		   device = selectedDevice;
 		   	console.log(device);
-		   	log(device);
 		   	var element = document.querySelector("#device_info");
-			element.innerText = "[CONNECTED] productName: " + device.productName + " manufacturerName: " + device.manufacturerName + " serialNumber: " + device.serialNumber;
+			element.innerText = "[CONNECTED] deviceuctName: " + device.deviceuctName + " manufacturerName: " + device.manufacturerName + " serialNumber: " + device.serialNumber;
 		   return device.open();
 		 });
       }
-      function read() {
-      	device.selectConfiguration(1);
-		device.transferIn(1, 64).then(log);
-      }
-      function write() {
-      	device.selectConfiguration(1);
-      	device.transferOut(1, new Uint8Array([63, 35, 35, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]))
+      function readwrite() {
+      	return device.open().then(() => {
+	      return device.reset();
+	    }).then(() => {
+	      return device.selectConfiguration(1);
+	    }).then(() => {
+	      return device.releaseInterface(2);
+	    }).then(() => {
+	      console.log(device);
+	      return device.claimInterface(2);
+	    }).then(() => {
+	      console.log("will transfer initialize");
+	      return device.transferOut(1, new Uint8Array([63, 35, 35, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+	  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]))
+	    }).then(() => {
+	      return device.transferIn(1, 64).then(log);
+	    }).then(() => {
+	      return device.transferIn(1, 64).then(log);
+	    }).then(() => {
+	      return device.transferIn(1, 64).then(log);
+	    }).then(() => {
+	      return device.transferIn(1, 64).then(log);
+	    }).then(() => {
+	      return device.transferIn(1, 64).then(log);
+	    }).then(() => {
+	      return device.transferIn(1, 64).then(log);
+	    }).then(() => {
+	      return device.transferIn(1, 64).then(log);
+	    }).then(() => {
+	      return device.transferIn(1, 64).then(log);
+	    }).then(() => {
+	      return device.transferIn(1, 64).then(log);
+	    }).then(() => {
+	      return device.releaseInterface(2);
+	    }).then(() => {
+	      return device.reset();
+	    }).then(() => {
+	      console.log(device);
+	    }).catch((e) => {
+	      console.error(e);
+	    });
       }
     </script>
   </body>
