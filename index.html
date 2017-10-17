@@ -1,7 +1,7 @@
 Update x
 
 <script>
-navigator.usb.requestDevice().then(function(device){
+navigator.usb.requestDevice({ filters: [] }).then(function(device){
    console.log(device);
 });
 </script>
