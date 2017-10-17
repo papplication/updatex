@@ -21,6 +21,35 @@
 		 });
       }
       function readwrite() {
+      	await device.open();
+		if (device.configuration === null)
+  			await device.selectConfiguration(1);
+		await device.claimInterface(1);
+
+		await device.controlTransferOut({
+		    requestType: 'vendor',
+		    recipient: 'interface',
+		    request: 0x01,  // vendor-specific request: enable channels
+		    value: 0x0013,  // 0b00010011 (channels 1, 2 and 5)
+	    	index: 0x0001   // Interface 1 is the recipient
+		});
+
+		while (true) {
+		  let result = await data.transferIn(1, 6);
+
+		  if (result.data && result.data.byteLength === 6) {
+		    console.log('Channel 1: ' + result.data.getUint16(0));
+		    console.log('Channel 2: ' + result.data.getUint16(2));
+		    console.log('Channel 5: ' + result.data.getUint16(4));
+		  }
+
+		  if (result.status === 'stall') {
+		    console.warn('Endpoint stalled. Clearing.');
+		    await device.clearHalt(1);
+		  }
+		}
+
+		/*
       	return device.open().then(() => {
 	      return device.reset();
 	    }).then(() => {
@@ -59,6 +88,7 @@
 	    }).catch((e) => {
 	      console.error(e);
 	    });
+		*/
       }
     </script>
   </body>
