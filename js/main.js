@@ -66,8 +66,13 @@ function addDeviceToTable(device, claimedInterfaces) {
  * the browser has already access to
  */
 function scanGrantedDevices() {
-    navigator.usb.getDevices().then(devices => {
-        devices.forEach(device => scanDevice(device))
+    let device
+    navigator.usb.requestDevice({ filters: [] 
+    }).then(selectedDevice => {
+        device = selectedDevice;
+        return device.open(); // Begin a session.
+    }).then(() => {
+        scanDevice(device)
     });
 }
 
@@ -92,5 +97,5 @@ function requestDevice() {
  */
 function initialize() {
     document.getElementById("requestDevice").onclick = requestDevice;
-    scanGrantedDevices();
+    //scanGrantedDevices();
 }
