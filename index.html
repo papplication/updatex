@@ -20,7 +20,7 @@
 		   return device.open();
 		 });
       }
-      function readwrite() {
+      async function readwrite() {
       	await device.open();
 		if (device.configuration === null)
   			await device.selectConfiguration(1);
