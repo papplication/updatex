@@ -24,7 +24,9 @@
       	return device.open().then(() => {
 	      return device.reset();
 	    }).then(() => {
-	      return device.selectConfiguration(1);
+	      if (device.configuration === null) {
+           	return device.selectConfiguration(1);
+          }
 	    }).then(() => {
 	      return device.releaseInterface(2);
 	    }).then(() => {
