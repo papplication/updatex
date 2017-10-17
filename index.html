@@ -23,8 +23,8 @@
       async function readwrite() {
       	await device.open();
 		if (device.configuration === null)
-  			await device.selectConfiguration(1);
-		await device.claimInterface(1);
+  			await device.selectConfiguration(device.configurations[0].configurationValue);
+		await device.claimInterface(device.configuration.interfaces[0].interfaceNumber);
 
 		await device.controlTransferOut({
 		    requestType: 'vendor',
