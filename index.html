@@ -28,9 +28,6 @@
            	return device.selectConfiguration(1);
           }
 	    }).then(() => {
-	    	console.log(device.configuration.interfaces[0].interfaceNumber);
-	      return device.releaseInterface(device.configuration.interfaces[0].interfaceNumber);
-	    }).then(() => {
 	      console.log(device);
 	      return device.claimInterface(device.configuration.interfaces[0].interfaceNumber);
 	    }).then(() => {
