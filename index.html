@@ -11,7 +11,7 @@
 		   device = selectedDevice;
 		   	console.log(device);
 		   	var element = document.querySelector("#device_info");
-			element.innerText = "connected: productName:" + device.productName + " manufacturerName:" + device.manufacturerName + " serialNumber:" + device.serialNumber;
+			element.innerText = "[CONNECTED] productName: " + device.productName + " manufacturerName: " + device.manufacturerName + " serialNumber: " + device.serialNumber;
 		   return device.open();
 		 });
       }
