@@ -1,95 +1,44 @@
+<!DOCTYPE html>
 <html>
-  <body>
-  	<h1>Update x</h1>
-    <input type='button' onclick="connect()" value='connect'/>
-    <input type='button' onclick="readwrite()" value='read/write'/>
-    <div id="device_info"></div>
-    <script>
-    function log(result) {
-  		let decoder = new TextDecoder();
-  		console.log('Received: ' + decoder.decode(result.data));
-	}
-      var device;
-      function connect() {  
-		navigator.usb.requestDevice({ filters: [] })
-		.then(selectedDevice => {
-		   device = selectedDevice;
-		   	console.log(device);
-		   	var element = document.querySelector("#device_info");
-			element.innerText = "[CONNECTED] deviceuctName: " + device.deviceuctName + " manufacturerName: " + device.manufacturerName + " serialNumber: " + device.serialNumber;
-		   return device.open();
-		 });
-      }
-      async function readwrite() {
-      	await device.open();
-		if (device.configuration === null)
-  			await device.selectConfiguration(device.configurations[0].configurationValue);
-		await device.claimInterface(device.configuration.interfaces[0].interfaceNumber);
-
-		await device.controlTransferOut({
-		    requestType: 'vendor',
-		    recipient: 'interface',
-		    request: 0x01,  // vendor-specific request: enable channels
-		    value: 0x0013,  // 0b00010011 (channels 1, 2 and 5)
-	    	index: 0x0001   // Interface 1 is the recipient
-		});
-
-		while (true) {
-		  let result = await data.transferIn(1, 6);
-
-		  if (result.data && result.data.byteLength === 6) {
-		    console.log('Channel 1: ' + result.data.getUint16(0));
-		    console.log('Channel 2: ' + result.data.getUint16(2));
-		    console.log('Channel 5: ' + result.data.getUint16(4));
-		  }
-
-		  if (result.status === 'stall') {
-		    console.warn('Endpoint stalled. Clearing.');
-		    await device.clearHalt(1);
-		  }
-		}
-
-		/*
-      	return device.open().then(() => {
-	      return device.reset();
-	    }).then(() => {
-	      return device.selectConfiguration(device.configurations[0].configurationValue);
-	    }).then(() => {
-	      console.log(device);
-	      return device.claimInterface(device.configuration.interfaces[0].interfaceNumber);
-	    }).then(() => {
-	      console.log("will transfer initialize");
-	      return device.transferOut(1, new Uint8Array([63, 35, 35, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-	  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]))
-	    }).then(() => {
-	      return device.transferIn(1, 64).then(log);
-	    }).then(() => {
-	      return device.transferIn(1, 64).then(log);
-	    }).then(() => {
-	      return device.transferIn(1, 64).then(log);
-	    }).then(() => {
-	      return device.transferIn(1, 64).then(log);
-	    }).then(() => {
-	      return device.transferIn(1, 64).then(log);
-	    }).then(() => {
-	      return device.transferIn(1, 64).then(log);
-	    }).then(() => {
-	      return device.transferIn(1, 64).then(log);
-	    }).then(() => {
-	      return device.transferIn(1, 64).then(log);
-	    }).then(() => {
-	      return device.transferIn(1, 64).then(log);
-	    }).then(() => {
-	      return device.releaseInterface(2);
-	    }).then(() => {
-	      return device.reset();
-	    }).then(() => {
-	      console.log(device);
-	    }).catch((e) => {
-	      console.error(e);
-	    });
-		*/
-      }
-    </script>
+  <head>
+    <title>Update X</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+  </head>
+  <body onload="initialize()" style="margin-left: 3%; margin-top: 3px; overflow-x: hidden;">
+    <!-- Heading -->
+    <h1 style="color: #00bc8c;">Update X</h1>
+    <!-- Disclaimer -->
+    <div class="panel panel-default col-md-4 col-lg-4">
+      <div class="panel-body">
+        <p class="text-success">
+          <b>WebUSB</b>
+          <br><br>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </p>
+      </div>
+    </div></div>
+    <!-- Actual Content -->
+    <div class="row">
+    <div class="cold-md-8 col-lg-8">
+    <!-- Button -->
+    <a href="#" id="requestDevice" class="btn btn-success">Choose A Device</a>
+    <!-- Device Table -->
+    <table class="table table-striped table-hover ">
+      <thead>
+        <tr>
+          <th>Device</th>
+          <th>Manufacturer</th>
+          <th>General Support?</th>
+          <th>Claimed Interfaces</th>
+          <th>Vendor ID : Product ID</th>
+        </tr>
+      </thead>
+      <tbody id="devices">
+      </tbody>
+    </table>
+    </div></div>
+    <!-- Scripts -->
+    <script src="js/serial.js"></script>
+    <script src="js/main.js"></script>
   </body>
 </html>
