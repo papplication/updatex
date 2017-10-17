@@ -2,13 +2,16 @@
   <body>
   	<h1>Update x</h1>
     <input type='button' onclick="connect()" value='connect'/>
+    <div id="device_info"></div>
     <script>
       var device;
       function connect() {  
 		navigator.usb.requestDevice({ filters: [] })
 		.then(selectedDevice => {
 		   device = selectedDevice;
-		   console.log(device);
+		   	console.log(device);
+		   	var element = document.querySelector("#device_info");
+			element.innerText += "<br>connected: " + device.productName + " " + device.manufacturerName;
 		   return device.open();
 		 });
       }
