@@ -23,6 +23,7 @@
 		 });
       }
       function read() {
+      	device.selectConfiguration(1);
 		device.transferIn(1, 64).then(log);
       }
       function write() {
