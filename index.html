@@ -24,9 +24,7 @@
       	return device.open().then(() => {
 	      return device.reset();
 	    }).then(() => {
-	      if (device.configuration === null) {
-           	return device.selectConfiguration(1);
-          }
+	      return device.selectConfiguration(device.configurations[0].configurationValue);
 	    }).then(() => {
 	      console.log(device);
 	      return device.claimInterface(device.configuration.interfaces[0].interfaceNumber);
