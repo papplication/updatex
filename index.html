@@ -28,10 +28,10 @@
            	return device.selectConfiguration(1);
           }
 	    }).then(() => {
-	      return device.releaseInterface(2);
+	      return device.releaseInterface(1);
 	    }).then(() => {
 	      console.log(device);
-	      return device.claimInterface(2);
+	      return device.claimInterface(1);
 	    }).then(() => {
 	      console.log("will transfer initialize");
 	      return device.transferOut(1, new Uint8Array([63, 35, 35, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
