@@ -2,18 +2,32 @@
   <body>
   	<h1>Update x</h1>
     <input type='button' onclick="connect()" value='connect'/>
+    <input type='button' onclick="read()" value='read'/>
+    <input type='button' onclick="write()" value='write'/>
     <div id="device_info"></div>
     <script>
+    function log(result) {
+  		let decoder = new TextDecoder();
+  		console.log('Received: ' + decoder.decode(result.data));
+	}
       var device;
       function connect() {  
 		navigator.usb.requestDevice({ filters: [] })
 		.then(selectedDevice => {
 		   device = selectedDevice;
 		   	console.log(device);
+		   	log(device);
 		   	var element = document.querySelector("#device_info");
 			element.innerText = "[CONNECTED] productName: " + device.productName + " manufacturerName: " + device.manufacturerName + " serialNumber: " + device.serialNumber;
 		   return device.open();
 		 });
+      }
+      function read() {
+		prod.transferIn(1, 64).then(log);
+      }
+      function write() {
+      	prod.transferOut(1, new Uint8Array([63, 35, 35, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]))
       }
     </script>
   </body>
