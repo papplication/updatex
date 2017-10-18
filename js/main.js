@@ -4,9 +4,12 @@
  * adds the results to the table.
  */
 function scanDevice(device) {
-    var interfaces = device.configuration.interfaces;
+    console.log(device);
 
     serial.connect(device)
+        .then(() => {
+            if (device.configuration === null)
+                return device.selectConfiguration(device.configurations[0].configurationValue)})
         .then(() => {
             return serial.claimAllTheInterfaces(device)})
         .then(() => {
