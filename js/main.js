@@ -5,7 +5,7 @@
  */
 function scanDevice(device) {
     console.log(device);
-
+    
     serial.connect(device)
         .then(() => {
             if (device.configuration === null)
@@ -14,6 +14,7 @@ function scanDevice(device) {
             return serial.claimAllTheInterfaces(device)})
         .then(() => {
             var claimedInterfaces = [];
+            var interfaces = device.configuration.interfaces;
             interfaces.forEach(iface => {
                 if (iface.claimed)
                     claimedInterfaces.push("#" + iface.interfaceNumber);
